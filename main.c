@@ -9,29 +9,23 @@
 #define TRUE 1
 
 void runCommand(List* list,char* currentPath){
-    const char* constPath = "/bin/";
-    char* commandPath = malloc(sizeof(char) * 256);
-    strcpy(commandPath,constPath);
-    strcat(commandPath,getString(list,0));
-    addString(list,currentPath);
-    //printf("%s\n", commandPath);
     pid_t pid = fork();
     if(pid == 0){
         //run code
         //execl(commandPath, "ls", "-als", "/",NULL);
         //List start with command path and ends in NULL
-        execv(commandPath,list->list);
+        execv(getElement(list, 0), getCommandList(list));
     }else{
         int status;
         waitpid(pid,&status,0);
     }
 }
 int checkCommand(List* list, char* currentPath){
-    char* command = getString(list, 0);
+    char* command = getElement(list, 0);
     if(strcmp(command,"exit") == 0){
         return TRUE;
     }else if(strcmp(command,"cd")==0){
-        strcpy(currentPath,getString(list, 1));
+        strcpy(currentPath, getElement(list, 1));
     }else{
         runCommand(list, currentPath);
     }
@@ -43,7 +37,7 @@ List getList(char *input){
     setupList(&list,ptr);
     ptr = strtok(NULL, " ");
     while(ptr != NULL){
-        addString(&list,ptr);
+        addArgs(&list, ptr);
         ptr = strtok(NULL, " ");
     }
     return list;
