@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/jamessergeant/Documents/GitHub/OS1---System-Calls-and-Processes/list.c
+
+/Users/jamessergeant/Documents/GitHub/OS1---System-Calls-and-Processes/main.c
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+string.h
+-
+ctype.h
+-
+list.c
+/Users/jamessergeant/Documents/GitHub/OS1---System-Calls-and-Processes/list.c
+
