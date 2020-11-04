@@ -18,10 +18,28 @@ List* setupList(List* stringList, char* string){
 
     return stringList;
 }
+char* chekArgs(char* args, char* workingDir){
+    if(args[0] == '-'||args[0]=='/'){
+        return args;
+    }
+    else{
+        char* dirAndArgs = malloc(256*sizeof(char));
+        strcpy(dirAndArgs,workingDir);
+        strcat(dirAndArgs,"/");
+        strcat(dirAndArgs,args);
+        return dirAndArgs;
 
-List* addArgs(List* stringList, char* string){
+    }
+}
+
+List* addArgs(List* stringList, char* string, char* workingDir){
         stringList->list = realloc(stringList->list, sizeof(int *) * ++stringList->length);
-        stringList->list[stringList->length - 1] = string;
+        stringList->list[stringList->length - 1] = chekArgs(string,workingDir);
+    return stringList;
+}
+List* addNull(List* stringList){
+    stringList->list = realloc(stringList->list, sizeof(int *) * ++stringList->length);
+    stringList->list[stringList->length - 1] = NULL;
     return stringList;
 }
 char* getElement(List* stringList , int x){
@@ -32,8 +50,9 @@ void printList(List* list){
         printf("%s\n", getElement(list, i));
     }
 }
-int** getCommandList(List* list){
-    addArgs(list, NULL);
+int** getCommandList(List* list, char* workingDir){
+    addNull(list);
+    //addArgs(list, NULL,workingDir);
     //printList(list);
     return list->list;
 }

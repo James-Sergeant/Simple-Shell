@@ -8,13 +8,14 @@
 #define FALSE 0
 #define TRUE 1
 
+char currentPath[256];
 void runCommand(List* list,char* currentPath){
     pid_t pid = fork();
     if(pid == 0){
         //run code
         //execl(commandPath, "ls", "-als", "/",NULL);
         //List start with command path and ends in NULL
-        execv(getElement(list, 0), getCommandList(list));
+        execv(getElement(list, 0), getCommandList(list,currentPath));
     }else{
         int status;
         waitpid(pid,&status,0);
@@ -22,11 +23,13 @@ void runCommand(List* list,char* currentPath){
 }
 int checkCommand(List* list, char* currentPath){
     char* command = getElement(list, 0);
-    if(strcmp(command,"exit") == 0){
+    //printf("%s", command);
+    if(strcmp(command,"/bin/exit") == 0){
         return TRUE;
-    }else if(strcmp(command,"cd")==0){
+    }else if(strcmp(command,"/bin/cd")==0){
         strcpy(currentPath, getElement(list, 1));
     }else{
+        //printf("Test");
         runCommand(list, currentPath);
     }
     return FALSE;
@@ -37,7 +40,7 @@ List getList(char *input){
     setupList(&list,ptr);
     ptr = strtok(NULL, " ");
     while(ptr != NULL){
-        addArgs(&list, ptr);
+        addArgs(&list, ptr,currentPath);
         ptr = strtok(NULL, " ");
     }
     return list;
@@ -50,8 +53,8 @@ char* getIn(){
 }
 
 int main() {
-    char *currentPath = (char*) malloc(256 * sizeof(char ));
     strcpy(currentPath,"/Users/jamessergeant");
+    //printf("%s\n",chekArgs("cat", currentPath));
     int exit = FALSE;
     while (exit != TRUE) {
         printf("%s:", currentPath);
